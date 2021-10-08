@@ -1,48 +1,82 @@
 const X = 'x';
 const O = 'o';
 
-const gameBoard = (() => {
-  let board = [X, X, X, null, null, O, O, O, X];
-  const getBoard = () => board;
-  const markCell = (mark, index) => {
-    board[index] = mark;
-  };
-  return {
-    getBoard,
-    markCell,
-  };
-})();
+const Player = (playTurnAt) => {
+  const mark = playTurnAt;
 
-const displayController = (() => {
-  const cells = Array.from(document.querySelectorAll('.js-cell'));
-  const updateBoard = () => {
-    const board = gameBoard.getBoard();
-    board.forEach((el, i) => {
-      if (!el) {
-        cells[i].classList.remove('tic', 'tac');
-      } else {
-        const mark = el === X ? 'tic' : 'tac';
-        cells[i].classList.add(mark);
-      }
-    });
-  };
-  return {
-    updateBoard,
-  };
-})();
+  const getMark = () => mark;
 
-const Player = (play) => {
-  const mark = play;
-  return {};
+  return {
+    getMark,
+  };
 };
 
 const game = (() => {
   let playerOne = Player(X);
   let playerTwo = Player(O);
   let currentPlayer = playerOne;
-  return {};
+
+  const _switchPlayers = () => {
+    currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
+  };
+  const playTurnAt = (i) => {
+    const mark = currentPlayer.getMark();
+    gameBoard.setCell(mark, i);
+    displayController.updateCell(mark, i);
+    _switchPlayers();
+  };
+
+  return {
+    playTurnAt,
+  };
 })();
 
-(() => {
-  displayController.updateBoard();
+const gameBoard = (() => {
+  /*   let board = [X, X, X, null, null, O, O, O, X]; */
+  let board = [null, null, null, null, null, null, null, null, null];
+
+  const getBoard = () => board;
+  const setCell = (mark, i) => {
+    board[i] = mark;
+  };
+  const isCellFilled = (i) => {
+    return !!board[i];
+  };
+
+  return {
+    getBoard,
+    setCell,
+    isCellFilled,
+  };
 })();
+
+const displayController = (() => {
+  const cells = Array.from(document.querySelectorAll('.js-cell'));
+  cells.forEach((cell) => cell.addEventListener('click', _handleClick));
+
+  const _handleClick = (e) => {
+    const i = +e.target.dataset.index;
+    if (gameBoard.isCellFilled(i)) return;
+    game.playTurnAt(i);
+  };
+  const updateBoard = () => {
+    const board = gameBoard.getBoard();
+    board.forEach((mark, i) => {
+      updateCell(mark, i);
+    });
+  };
+  const updateCell = (mark, i) => {
+    if (!mark) {
+      cells[i].classList.remove('tic', 'tac');
+    } else {
+      cells[i].classList.add(mark === X ? 'tic' : 'tac');
+    }
+  };
+
+  return {
+    updateBoard,
+    updateCell,
+  };
+})();
+
+/* (() => {})(); */
