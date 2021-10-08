@@ -19,6 +19,7 @@ const game = (() => {
   const _switchPlayers = () => {
     currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
   };
+
   const playTurnAt = (i) => {
     const mark = currentPlayer.getMark();
     gameBoard.setCell(mark, i);
@@ -52,12 +53,13 @@ const gameBoard = (() => {
 
 const displayController = (() => {
   const cells = Array.from(document.querySelectorAll('.js-cell'));
-  const _handleClick = (e) => {
-    const i = +e.target.dataset.index;
-    if (gameBoard.isCellFilled(i)) return;
-    game.playTurnAt(i);
-  };
-  cells.forEach((cell) => cell.addEventListener('click', _handleClick));
+  cells.forEach((cell) =>
+    cell.addEventListener('click', (e) => {
+      const i = +e.target.dataset.index;
+      if (gameBoard.isCellFilled(i)) return;
+      game.playTurnAt(i);
+    })
+  );
 
   const updateBoard = () => {
     const board = gameBoard.getBoard();
