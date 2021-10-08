@@ -52,13 +52,13 @@ const gameBoard = (() => {
 
 const displayController = (() => {
   const cells = Array.from(document.querySelectorAll('.js-cell'));
-  cells.forEach((cell) => cell.addEventListener('click', _handleClick));
-
   const _handleClick = (e) => {
     const i = +e.target.dataset.index;
     if (gameBoard.isCellFilled(i)) return;
     game.playTurnAt(i);
   };
+  cells.forEach((cell) => cell.addEventListener('click', _handleClick));
+
   const updateBoard = () => {
     const board = gameBoard.getBoard();
     board.forEach((mark, i) => {
