@@ -45,18 +45,25 @@ body {
   background: url('/svg/board.svg');
   background-repeat: no-repeat;
   display: grid;
-  grid-template-rows: [screen] auto repeat(5, auto [row]);
+  grid-template-rows: repeat(3, auto [row]);
   grid-template-columns: repeat(3, auto [col]);
   width: 300px;
   height: 300px;
 }
 
+.cell {
+  background-position-x: center;
+  background-position-y: center;
+  background-size: 60%;
+  background-repeat: no-repeat;
+}
+
 .tic {
-  background: url('/svg/tic.svg');
+  background-image: url('/svg/tic.svg');
 }
 
 .tac {
-  background: url('/svg/tac.svg');
+  background-image: url('/svg/tac.svg');
 }
 
 .footer {
