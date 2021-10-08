@@ -14,13 +14,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-content: center;
+  align-items: stretch;
 }
 
 .header {
   height: 72px;
-  background: darkslateblue;
-  color: white;
   font-size: 32px;
   font-weight: 900;
   display: flex;
@@ -32,7 +30,33 @@ body {
 .content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex: 1;
+}
+
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.gameboard {
+  background: url('/svg/board.svg');
+  background-repeat: no-repeat;
+  display: grid;
+  grid-template-rows: [screen] auto repeat(5, auto [row]);
+  grid-template-columns: repeat(3, auto [col]);
+  width: 300px;
+  height: 300px;
+}
+
+.tic {
+  background: url('/svg/tic.svg');
+}
+
+.tac {
+  background: url('/svg/tac.svg');
 }
 
 .footer {
