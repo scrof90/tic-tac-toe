@@ -11,6 +11,21 @@ const Player = (m) => {
   };
 };
 
+/*
+    TODO: build a check for win condition
+    Should check for 3-in-a-row and a tie.
+ */
+
+/*
+    TODO: Clean up the interface to allow players to put in their names, include
+    a button to start / restart the game and add a display element that
+    congratulates the winning player!
+ */
+
+/*
+    TODO: create an AI for solo play
+ */
+
 const game = (() => {
   let playerOne = Player(X);
   let playerTwo = Player(O);
@@ -75,5 +90,3 @@ const displayController = (() => {
     markCell,
   };
 })();
-
-/* (() => {})(); */
