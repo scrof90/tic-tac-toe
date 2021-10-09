@@ -1,8 +1,8 @@
 const X = 'x';
 const O = 'o';
 
-const Player = (playTurnAt) => {
-  const mark = playTurnAt;
+const Player = (m) => {
+  const mark = m;
 
   const getMark = () => mark;
 
@@ -23,7 +23,7 @@ const game = (() => {
   const playTurnAt = (i) => {
     const mark = currentPlayer.getMark();
     gameBoard.setCell(mark, i);
-    displayController.updateCell(mark, i);
+    displayController.markCell(mark, i);
     _switchPlayers();
   };
 
@@ -61,23 +61,18 @@ const displayController = (() => {
     })
   );
 
-  const updateBoard = () => {
-    const board = gameBoard.getBoard();
-    board.forEach((mark, i) => {
-      updateCell(mark, i);
+  const clearBoard = () => {
+    cells.forEach((cell) => {
+      cell.classList.remove('tic', 'tac');
     });
   };
-  const updateCell = (mark, i) => {
-    if (!mark) {
-      cells[i].classList.remove('tic', 'tac');
-    } else {
-      cells[i].classList.add(mark === X ? 'tic' : 'tac');
-    }
+  const markCell = (mark, i) => {
+    cells[i].classList.add(mark === X ? 'tic' : 'tac');
   };
 
   return {
-    updateBoard,
-    updateCell,
+    clearBoard,
+    markCell,
   };
 })();
 
