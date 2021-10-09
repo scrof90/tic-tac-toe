@@ -49,18 +49,19 @@ const game = (() => {
 
 const gameBoard = (() => {
   /*   let board = [X, X, X, null, null, O, O, O, X]; */
-  let board = [null, null, null, null, null, null, null, null, null];
+  const emptyBoard = [null, null, null, null, null, null, null, null, null];
+  let board = emptyBoard;
 
-  const getBoard = () => board;
+  const clearBoard = () => {
+    board = emptyBoard;
+  };
   const setCell = (mark, i) => {
     board[i] = mark;
   };
-  const isCellFilled = (i) => {
-    return !!board[i];
-  };
+  const isCellFilled = (i) => !!board[i];
 
   return {
-    getBoard,
+    clearBoard,
     setCell,
     isCellFilled,
   };
@@ -70,7 +71,7 @@ const displayController = (() => {
   const cells = Array.from(document.querySelectorAll('.js-cell'));
   cells.forEach((cell) =>
     cell.addEventListener('click', (e) => {
-      const i = +e.target.dataset.index;
+      const i = cells.indexOf(e.target);
       if (gameBoard.isCellFilled(i)) return;
       game.playTurnAt(i);
     })
