@@ -42,7 +42,7 @@ body {
 }
 
 .gameboard {
-  background: url('/svg/board.svg');
+  background: url('svg/board.svg');
   background-repeat: no-repeat;
   display: grid;
   grid-template-rows: repeat(3, auto [row]);
@@ -59,11 +59,11 @@ body {
 }
 
 .tic {
-  background-image: url('/svg/tic.svg');
+  background-image: url('svg/tic.svg');
 }
 
 .tac {
-  background-image: url('/svg/tac.svg');
+  background-image: url('svg/tac.svg');
 }
 
 .footer {
