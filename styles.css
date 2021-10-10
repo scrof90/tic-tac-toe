@@ -30,15 +30,38 @@ body {
 .content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
   flex: 1;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-restart {
+  background-image: url('svg/refresh_black_24dp.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: white;
+  height: 3em;
+  width: 3em;
+  border-width: 0px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 1em lightslategray;
+}
+
+.btn-restart:hover {
+  box-shadow: 0px 0px 1.5em hsl(200, 90%, 50%);
 }
 
 .game-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .gameboard {
