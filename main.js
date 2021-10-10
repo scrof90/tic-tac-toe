@@ -54,6 +54,7 @@ const game = (() => {
 
   const restart = () => {
     gameOver = false;
+    currentPlayer = playerOne;
     gameBoard.clearBoard();
     displayController.clearBoard();
   };
@@ -71,23 +72,25 @@ const gameBoard = (() => {
   const emptyBoard = [null, null, null, null, null, null, null, null, null];
   let board = [...emptyBoard];
 
-  const _checkRow = (rowNumber) => {
-    const rowIndex = (rowNumber - 1) * 3;
-    const row = board.slice(rowIndex, rowIndex + 3);
-    const mark = row[0];
-    if (mark) return row.every((el) => el === mark);
+  const _checkRows = () => {
+    for (let rowNum = 1; rowNum <= 3; rowNum++) {
+      const rowIndex = (rowNum - 1) * 3;
+      const row = board.slice(rowIndex, rowIndex + 3);
+      const mark = row[0];
+      if (mark) return row.every((el) => el === mark);
+    }
   };
-  const _checkRows = () => _checkRow(1) || _checkRow(2) || _checkRow(3);
 
-  const _checkCol = (colNumber) => {
-    const colStart = (colNumber - 1) * 3;
-    const colMiddle = colStart + 3;
-    const colEnd = colMiddle + 3;
-    const col = [board[colStart], board[colMiddle], board[colEnd]];
-    const mark = col[0];
-    if (mark) return col.every((el) => el === mark);
+  const _checkCols = () => {
+    for (let colNum = 1; colNum <= 3; colNum++) {
+      const colStart = (colNum - 1) * 3;
+      const colMiddle = colStart + 3;
+      const colEnd = colMiddle + 3;
+      const col = [board[colStart], board[colMiddle], board[colEnd]];
+      const mark = col[0];
+      if (mark) return col.every((el) => el === mark);
+    }
   };
-  const _checkCols = () => _checkCol(1) || _checkCol(2) || _checkCol(3);
 
   const _checkLeftDiag = () => {
     const diag = [board[0], board[4], board[board.length - 1]];
@@ -99,10 +102,9 @@ const gameBoard = (() => {
     const mark = diag[0];
     if (mark) return diag.every((el) => el === mark);
   };
-  const _checkDiags = () => _checkLeftDiag() || _checkRightDiag();
 
   const checkForWinCondition = () =>
-    _checkRows() || _checkCols() || _checkDiags();
+    _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
 
   const clearBoard = () => {
     board = [...emptyBoard];
@@ -127,7 +129,7 @@ const displayController = (() => {
   cells.forEach((cell) =>
     cell.addEventListener('click', (e) => {
       const i = cells.indexOf(e.target);
-      if (gameBoard.isCellFilled(i) || game.isOver()) return;
+      if (game.isOver() || gameBoard.isCellFilled(i)) return;
       game.playTurnAt(i);
     })
   );
