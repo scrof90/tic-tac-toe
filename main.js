@@ -74,8 +74,8 @@ const gameBoard = (() => {
 
   const _checkRows = () => {
     for (let rowNum = 1; rowNum <= 3; rowNum++) {
-      const rowIndex = (rowNum - 1) * 3;
-      const row = board.slice(rowIndex, rowIndex + 3);
+      const rowStart = (rowNum - 1) * 3;
+      const row = board.slice(rowStart, rowStart + 3);
       const mark = row[0];
       if (mark) return row.every((el) => el === mark);
     }
@@ -83,7 +83,7 @@ const gameBoard = (() => {
 
   const _checkCols = () => {
     for (let colNum = 1; colNum <= 3; colNum++) {
-      const colStart = (colNum - 1) * 3;
+      const colStart = colNum - 1;
       const colMiddle = colStart + 3;
       const colEnd = colMiddle + 3;
       const col = [board[colStart], board[colMiddle], board[colEnd]];

@@ -30,7 +30,7 @@ body {
 .content {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   flex: 1;
 }
@@ -59,8 +59,10 @@ body {
 
 .game-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 5em;
   flex: 0 1 auto;
 }
 
