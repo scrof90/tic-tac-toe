@@ -73,20 +73,20 @@ const gameBoard = (() => {
   let board = [...emptyBoard];
 
   const _checkRows = () => {
-    for (let rowNum = 1; rowNum <= 3; rowNum++) {
-      const rowStart = (rowNum - 1) * 3;
-      const row = board.slice(rowStart, rowStart + 3);
+    for (let i = 0; i <= 2; i++) {
+      const rowStart = i * 3;
+      const rowEnd = rowStart + 3;
+      const row = board.slice(rowStart, rowEnd);
       const mark = row[0];
       if (mark) return row.every((el) => el === mark);
     }
   };
 
   const _checkCols = () => {
-    for (let colNum = 1; colNum <= 3; colNum++) {
-      const colStart = colNum - 1;
-      const colMiddle = colStart + 3;
+    for (let i = 0; i <= 2; i++) {
+      const colMiddle = i + 3;
       const colEnd = colMiddle + 3;
-      const col = [board[colStart], board[colMiddle], board[colEnd]];
+      const col = [board[i], board[colMiddle], board[colEnd]];
       const mark = col[0];
       if (mark) return col.every((el) => el === mark);
     }
