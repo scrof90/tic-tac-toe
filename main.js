@@ -12,11 +12,6 @@ const Player = (m) => {
 };
 
 /*
-    TODO: build a check for win condition
-    Should check for a tie.
- */
-
-/*
     TODO: Clean up the interface to allow players to put in their names and add
     a display element that congratulates the winning player!
  */
@@ -36,8 +31,12 @@ const game = (() => {
   };
 
   const _end = (player) => {
-    const winner = player === playerOne ? 'player 1' : 'player 2';
-    alert(`${winner} wins`);
+    if (!player) {
+      alert("It's a tie!");
+    } else {
+      const winner = player === playerOne ? 'player 1' : 'player 2';
+      alert(`${winner} wins`);
+    }
     gameOver = true;
   };
 
@@ -47,6 +46,8 @@ const game = (() => {
     displayController.markCell(mark, i);
     if (gameBoard.checkForWinCondition()) {
       _end(currentPlayer);
+    } else if (gameBoard.checkForTie()) {
+      _end();
     } else {
       _switchPlayers();
     }
@@ -106,6 +107,10 @@ const gameBoard = (() => {
   const checkForWinCondition = () =>
     _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
 
+  const checkForTie = () => {
+    return board.every((el) => el);
+  };
+
   const clearBoard = () => {
     board = [...emptyBoard];
   };
@@ -118,6 +123,7 @@ const gameBoard = (() => {
 
   return {
     checkForWinCondition,
+    checkForTie,
     clearBoard,
     setCell,
     isCellFilled,
