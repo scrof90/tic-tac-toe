@@ -14,7 +14,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: center;
 }
 
 .header {
@@ -28,16 +28,52 @@ body {
 }
 
 .content {
+  max-width: 800px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   flex: 1;
+  gap: 3em;
 }
 
-.controls {
+.player-selectors-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 3em;
+}
+
+.player-selector {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
+.player-selector form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.player-selector button {
+  width: 5em;
+  height: 2em;
+  border: 3px;
+  border-radius: 5px;
+}
+
+.player-selector button:hover {
+  background-color: hsl(200, 90%, 80%);
+}
+
+.player-selector button:active {
+  background-color: hsl(200, 90%, 90%);
+}
+
+.btn-pressed {
+  background-color: orange;
 }
 
 .btn-restart {

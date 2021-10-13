@@ -15,22 +15,39 @@
     <div class="wrapper">
       <header class="header"><h1>Tic Tac Toe</h1></header>
       <main class="content">
-        <div class="game-wrapper">
-          <div class="gameboard js-gameboard">
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
-            <div class="cell js-cell"></div>
+        <div class="player-selectors-wrapper">
+          <div class="player-selector">
+            <span>X</span>
+            <form>
+              <button class="btn-pressed js-btn-tic-human" type="button">
+                Human
+              </button>
+              <button class="js-btn-tic-ai" type="button">AI</button>
+            </form>
           </div>
-          <div class="controls">
-            <button class="btn-restart js-btn-restart" type="button"></button>
+          vs
+          <div class="player-selector">
+            <span>O</span>
+            <form>
+              <button class="btn-pressed js-btn-tac-human" type="button">
+                Human
+              </button>
+              <button class="js-btn-tac-ai" type="button">AI</button>
+            </form>
           </div>
         </div>
+        <div class="gameboard js-gameboard">
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+          <div class="cell js-cell"></div>
+        </div>
+        <button class="btn-restart js-btn-restart" type="button"></button>
       </main>
       <footer class="footer">
         <a href="https://github.com/scrof90">

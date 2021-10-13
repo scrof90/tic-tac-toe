@@ -79,7 +79,7 @@ const gameBoard = (() => {
       const rowEnd = rowStart + 3;
       const row = board.slice(rowStart, rowEnd);
       const mark = row[0];
-      if (mark) return row.every((el) => el === mark);
+      if (mark) return row.every((cell) => cell === mark);
     }
   };
 
@@ -89,27 +89,25 @@ const gameBoard = (() => {
       const colEnd = colMiddle + 3;
       const col = [board[i], board[colMiddle], board[colEnd]];
       const mark = col[0];
-      if (mark) return col.every((el) => el === mark);
+      if (mark) return col.every((cell) => cell === mark);
     }
   };
 
   const _checkLeftDiag = () => {
     const diag = [board[0], board[4], board[board.length - 1]];
     const mark = diag[0];
-    if (mark) return diag.every((el) => el === mark);
+    if (mark) return diag.every((cell) => cell === mark);
   };
   const _checkRightDiag = () => {
     const diag = [board[2], board[4], board[6]];
     const mark = diag[0];
-    if (mark) return diag.every((el) => el === mark);
+    if (mark) return diag.every((cell) => cell === mark);
   };
 
   const checkForWinCondition = () =>
     _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
 
-  const checkForTie = () => {
-    return board.every((el) => el);
-  };
+  const checkForTie = () => board.every((cell) => cell);
 
   const clearBoard = () => {
     board = [...emptyBoard];
