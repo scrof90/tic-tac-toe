@@ -43,7 +43,7 @@ const Player = (m, ai) => {
 const game = (() => {
   let playerOne = Player(X, false);
   let playerTwo = Player(O, false);
-  let currentPlayer = playerOne;
+  let currentPlayer;
   let started = false;
   let over = false;
 
@@ -52,19 +52,18 @@ const game = (() => {
   };
 
   const _end = (player) => {
-    displayController.togglePlayerSelectorsBlockVisibility();
+    over = true;
     if (!player) {
       alert("It's a tie!");
     } else {
       const winner = player === playerOne ? 'player 1' : 'player 2';
       alert(`${winner} wins`);
     }
-    over = true;
   };
 
   const start = () => {
     started = true;
-    displayController.togglePlayerSelectorsBlockVisibility();
+    currentPlayer = playerOne;
     if (currentPlayer.isAi()) currentPlayer.play();
   };
 
@@ -72,7 +71,7 @@ const game = (() => {
     const mark = currentPlayer.getMark();
     gameBoard.setCell(mark, i);
     displayController.markCell(mark, i);
-    if (gameBoard.checkForWinCondition()) {
+    if (gameBoard.checkForWin()) {
       _end(currentPlayer);
     } else if (gameBoard.checkForTie()) {
       _end();
@@ -83,6 +82,7 @@ const game = (() => {
   };
 
   const restart = () => {
+    started = false;
     over = false;
     currentPlayer = playerOne;
     gameBoard.clearBoard();
@@ -145,7 +145,7 @@ const gameBoard = (() => {
     if (mark) return diag.every((cell) => cell === mark);
   };
 
-  const checkForWinCondition = () =>
+  const checkForWin = () =>
     _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
 
   const checkForTie = () => board.every((cell) => cell);
@@ -161,7 +161,7 @@ const gameBoard = (() => {
   const isCellFilled = (i) => !!board[i];
 
   return {
-    checkForWinCondition,
+    checkForWin,
     checkForTie,
     clearBoard,
     setCell,
@@ -173,9 +173,6 @@ const displayController = (() => {
   // player selectors
 
   const playerSelectorsBlock = document.querySelector('.js-player-selectors');
-  const togglePlayerSelectorsBlockVisibility = () => {
-    playerSelectorsBlock.classList.toggle('hidden');
-  };
 
   // player selection buttons
 
@@ -183,22 +180,27 @@ const displayController = (() => {
   const btnTicAi = document.querySelector('.js-btn-tic-ai');
   const btnTacHuman = document.querySelector('.js-btn-tac-human');
   const btnTacAi = document.querySelector('.js-btn-tac-ai');
+
   btnTicHuman.onclick = () => {
+    if (game.hasStarted()) return;
     btnTicHuman.classList.add('pressed');
     btnTicAi.classList.remove('pressed');
     game.setPlayer(X, false);
   };
   btnTicAi.onclick = () => {
+    if (game.hasStarted()) return;
     btnTicAi.classList.add('pressed');
     btnTicHuman.classList.remove('pressed');
     game.setPlayer(X, true);
   };
   btnTacHuman.onclick = () => {
+    if (game.hasStarted()) return;
     btnTacHuman.classList.add('pressed');
     btnTacAi.classList.remove('pressed');
     game.setPlayer(O, false);
   };
   btnTacAi.onclick = () => {
+    if (game.hasStarted()) return;
     btnTacAi.classList.add('pressed');
     btnTacHuman.classList.remove('pressed');
     game.setPlayer(O, true);
@@ -210,21 +212,31 @@ const displayController = (() => {
   cells.forEach((cell) =>
     cell.addEventListener('click', (e) => {
       const i = cells.indexOf(e.target);
-      if (game.isOver() || gameBoard.isCellFilled(i) || !game.hasStarted())
+      if (!game.hasStarted() || game.isOver() || gameBoard.isCellFilled(i))
         return;
       game.playTurnAt(i);
     })
   );
 
-  // start button
+  // control buttons
 
-  const btnStart = document.querySelector('.js-btn-start');
-  btnStart.onclick = game.start;
+  const btnControl = document.querySelector('.js-btn-control');
 
-  // restart button
+  btnControl.onclick = () => {
+    if (!game.hasStarted()) {
+      playerSelectorsBlock.classList.add('hidden');
+      btnControl.classList.remove('start');
+      btnControl.classList.add('restart');
+      game.start();
+    } else {
+      playerSelectorsBlock.classList.remove('hidden');
+      btnControl.classList.remove('restart');
+      btnControl.classList.add('start');
+      game.restart();
+    }
+  };
 
-  const btnRestart = document.querySelector('.js-btn-restart');
-  btnRestart.onclick = game.restart;
+  // public methods
 
   const clearBoard = () => {
     cells.forEach((cell) => {
@@ -238,6 +250,5 @@ const displayController = (() => {
   return {
     clearBoard,
     markCell,
-    togglePlayerSelectorsBlockVisibility,
   };
 })();

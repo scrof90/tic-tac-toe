@@ -80,8 +80,7 @@ body {
   background-color: orange;
 }
 
-.btn-restart {
-  background-image: url('svg/refresh_black_24dp.svg');
+.btn-control {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -93,25 +92,16 @@ body {
   box-shadow: 0px 0px 1em lightslategray;
 }
 
-.btn-restart:hover {
+.btn-control:hover {
   box-shadow: 0px 0px 1.5em hsl(200, 90%, 50%);
 }
 
-.btn-start {
+.start {
+  background-image: url('svg/play_arrow_black_24dp.svg');
+}
+
+.restart {
   background-image: url('svg/refresh_black_24dp.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-color: white;
-  height: 3em;
-  width: 3em;
-  border-width: 0px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 1em lightslategray;
-}
-
-.btn-restart:hover {
-  box-shadow: 0px 0px 1.5em hsl(200, 90%, 50%);
 }
 
 .game-wrapper {
