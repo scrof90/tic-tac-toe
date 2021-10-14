@@ -22,6 +22,7 @@ const Player = (m, ai) => {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
+
   const _chooseRandomCell = () => _getRandomIntInclusive(0, 8);
 
   // public methods
@@ -33,7 +34,9 @@ const Player = (m, ai) => {
     } while (gameBoard.isCellFilled(choice));
     game.playTurnAt(choice);
   };
+
   const getMark = () => mark;
+
   const isAi = () => aiControlled;
 
   return {
@@ -55,7 +58,10 @@ const game = (() => {
   const _switchPlayers = () => {
     currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
   };
-  const _end = (player) => {
+
+  // TODO: make game over prettier
+
+  const _gameOver = (player) => {
     over = true;
     if (!player) {
       alert("It's a tie!");
@@ -74,24 +80,27 @@ const game = (() => {
       playerTwo = Player(mark, ai);
     }
   };
+
   const start = () => {
     started = true;
     currentPlayer = playerOne;
     if (currentPlayer.isAi()) currentPlayer.play();
   };
+
   const playTurnAt = (i) => {
     const mark = currentPlayer.getMark();
     gameBoard.setCell(mark, i);
     displayController.markCell(mark, i);
     if (gameBoard.checkForWin()) {
-      _end(currentPlayer);
+      _gameOver(currentPlayer);
     } else if (gameBoard.checkForTie()) {
-      _end();
+      _gameOver();
     } else {
       _switchPlayers();
       if (currentPlayer.isAi()) currentPlayer.play();
     }
   };
+
   const restart = () => {
     started = false;
     over = false;
@@ -99,7 +108,9 @@ const game = (() => {
     gameBoard.clearBoard();
     displayController.clearBoard();
   };
+
   const hasStarted = () => started;
+
   const isOver = () => over;
 
   return {
@@ -143,6 +154,7 @@ const gameBoard = (() => {
     const mark = diag[0];
     if (mark) return diag.every((cell) => cell === mark);
   };
+
   const _checkRightDiag = () => {
     const diag = [board[2], board[4], board[6]];
     const mark = diag[0];
@@ -153,13 +165,17 @@ const gameBoard = (() => {
 
   const checkForWin = () =>
     _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
+
   const checkForTie = () => board.every((cell) => cell);
+
   const clearBoard = () => {
     board = [...emptyBoard];
   };
+
   const setCell = (mark, i) => {
     board[i] = mark;
   };
+
   const isCellFilled = (i) => !!board[i];
 
   return {
@@ -187,16 +203,19 @@ const displayController = (() => {
     btnTicAi.classList.remove('pressed');
     game.setPlayer(X, false);
   };
+
   btnTicAi.onclick = () => {
     btnTicAi.classList.add('pressed');
     btnTicHuman.classList.remove('pressed');
     game.setPlayer(X, true);
   };
+
   btnTacHuman.onclick = () => {
     btnTacHuman.classList.add('pressed');
     btnTacAi.classList.remove('pressed');
     game.setPlayer(O, false);
   };
+
   btnTacAi.onclick = () => {
     btnTacAi.classList.add('pressed');
     btnTacHuman.classList.remove('pressed');
@@ -213,6 +232,8 @@ const displayController = (() => {
       game.playTurnAt(i);
     })
   );
+
+  // control button
 
   btnControl.onclick = () => {
     playerSelectorsBlock.classList.toggle('hidden');
@@ -232,6 +253,7 @@ const displayController = (() => {
       cell.classList.remove('tic', 'tac');
     });
   };
+
   const markCell = (mark, i) => {
     cells[i].classList.add(mark === X ? 'tic' : 'tac');
   };
