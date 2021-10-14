@@ -15,11 +15,11 @@
     <div class="wrapper">
       <header class="header"><h1>Tic Tac Toe</h1></header>
       <main class="content">
-        <div class="player-selectors-wrapper">
+        <div class="player-selectors js-player-selectors">
           <div class="player-selector">
             <span>X</span>
             <form>
-              <button class="btn-pressed js-btn-tic-human" type="button">
+              <button class="pressed js-btn-tic-human" type="button">
                 Human
               </button>
               <button class="js-btn-tic-ai" type="button">AI</button>
@@ -29,7 +29,7 @@
           <div class="player-selector">
             <span>O</span>
             <form>
-              <button class="btn-pressed js-btn-tac-human" type="button">
+              <button class="pressed js-btn-tac-human" type="button">
                 Human
               </button>
               <button class="js-btn-tac-ai" type="button">AI</button>
@@ -47,6 +47,7 @@
           <div class="cell js-cell"></div>
           <div class="cell js-cell"></div>
         </div>
+        <button class="btn-start js-btn-start" type="button"></button>
         <button class="btn-restart js-btn-restart" type="button"></button>
       </main>
       <footer class="footer">
