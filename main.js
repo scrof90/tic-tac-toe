@@ -7,13 +7,15 @@ const O = 'o';
  */
 
 /*
-    TODO: create an AI for solo play
-    make player selection disappear on game start
+    TODO: create an expert AI using minimax algorithm:
+    https://en.wikipedia.org/wiki/Minimax
  */
 
 const Player = (m, ai) => {
   const mark = m;
   const aiControlled = ai;
+
+  // private methods
 
   const _getRandomIntInclusive = (min, max) => {
     min = Math.ceil(min);
@@ -22,6 +24,8 @@ const Player = (m, ai) => {
   };
   const _chooseRandomCell = () => _getRandomIntInclusive(0, 8);
 
+  // public methods
+
   const play = () => {
     let choice;
     do {
@@ -29,7 +33,6 @@ const Player = (m, ai) => {
     } while (gameBoard.isCellFilled(choice));
     game.playTurnAt(choice);
   };
-
   const getMark = () => mark;
   const isAi = () => aiControlled;
 
@@ -47,10 +50,11 @@ const game = (() => {
   let started = false;
   let over = false;
 
+  // private methods
+
   const _switchPlayers = () => {
     currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
   };
-
   const _end = (player) => {
     over = true;
     if (!player) {
@@ -61,12 +65,20 @@ const game = (() => {
     }
   };
 
+  // public methods
+
+  const setPlayer = (mark, ai) => {
+    if (mark === X) {
+      playerOne = Player(mark, ai);
+    } else {
+      playerTwo = Player(mark, ai);
+    }
+  };
   const start = () => {
     started = true;
     currentPlayer = playerOne;
     if (currentPlayer.isAi()) currentPlayer.play();
   };
-
   const playTurnAt = (i) => {
     const mark = currentPlayer.getMark();
     gameBoard.setCell(mark, i);
@@ -80,7 +92,6 @@ const game = (() => {
       if (currentPlayer.isAi()) currentPlayer.play();
     }
   };
-
   const restart = () => {
     started = false;
     over = false;
@@ -88,31 +99,24 @@ const game = (() => {
     gameBoard.clearBoard();
     displayController.clearBoard();
   };
-
   const hasStarted = () => started;
   const isOver = () => over;
 
-  const setPlayer = (mark, ai) => {
-    if (mark === X) {
-      playerOne = Player(mark, ai);
-    } else {
-      playerTwo = Player(mark, ai);
-    }
-  };
-
   return {
+    setPlayer,
     start,
     playTurnAt,
     restart,
     hasStarted,
     isOver,
-    setPlayer,
   };
 })();
 
 const gameBoard = (() => {
   const emptyBoard = [null, null, null, null, null, null, null, null, null];
   let board = [...emptyBoard];
+
+  // private methods
 
   const _checkRows = () => {
     for (let i = 0; i <= 2; i++) {
@@ -145,19 +149,17 @@ const gameBoard = (() => {
     if (mark) return diag.every((cell) => cell === mark);
   };
 
+  // public methods
+
   const checkForWin = () =>
     _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
-
   const checkForTie = () => board.every((cell) => cell);
-
   const clearBoard = () => {
     board = [...emptyBoard];
   };
-
   const setCell = (mark, i) => {
     board[i] = mark;
   };
-
   const isCellFilled = (i) => !!board[i];
 
   return {
@@ -170,45 +172,39 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-  // player selectors
-
   const playerSelectorsBlock = document.querySelector('.js-player-selectors');
-
-  // player selection buttons
-
   const btnTicHuman = document.querySelector('.js-btn-tic-human');
   const btnTicAi = document.querySelector('.js-btn-tic-ai');
   const btnTacHuman = document.querySelector('.js-btn-tac-human');
   const btnTacAi = document.querySelector('.js-btn-tac-ai');
+  const cells = Array.from(document.querySelectorAll('.js-cell'));
+  const btnControl = document.querySelector('.js-btn-control');
+
+  // player selection buttons' methods
 
   btnTicHuman.onclick = () => {
-    if (game.hasStarted()) return;
     btnTicHuman.classList.add('pressed');
     btnTicAi.classList.remove('pressed');
     game.setPlayer(X, false);
   };
   btnTicAi.onclick = () => {
-    if (game.hasStarted()) return;
     btnTicAi.classList.add('pressed');
     btnTicHuman.classList.remove('pressed');
     game.setPlayer(X, true);
   };
   btnTacHuman.onclick = () => {
-    if (game.hasStarted()) return;
     btnTacHuman.classList.add('pressed');
     btnTacAi.classList.remove('pressed');
     game.setPlayer(O, false);
   };
   btnTacAi.onclick = () => {
-    if (game.hasStarted()) return;
     btnTacAi.classList.add('pressed');
     btnTacHuman.classList.remove('pressed');
     game.setPlayer(O, true);
   };
 
-  // game field
+  // game field cells method
 
-  const cells = Array.from(document.querySelectorAll('.js-cell'));
   cells.forEach((cell) =>
     cell.addEventListener('click', (e) => {
       const i = cells.indexOf(e.target);
@@ -218,21 +214,14 @@ const displayController = (() => {
     })
   );
 
-  // control buttons
-
-  const btnControl = document.querySelector('.js-btn-control');
-
   btnControl.onclick = () => {
-    if (!game.hasStarted()) {
-      playerSelectorsBlock.classList.add('hidden');
-      btnControl.classList.remove('start');
-      btnControl.classList.add('restart');
-      game.start();
-    } else {
-      playerSelectorsBlock.classList.remove('hidden');
-      btnControl.classList.remove('restart');
-      btnControl.classList.add('start');
+    playerSelectorsBlock.classList.toggle('hidden');
+    btnControl.classList.toggle('start');
+    btnControl.classList.toggle('restart');
+    if (game.hasStarted()) {
       game.restart();
+    } else {
+      game.start();
     }
   };
 
