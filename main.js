@@ -58,8 +58,6 @@ const game = (() => {
     currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
   };
 
-  // TODO: make game over prettier
-
   const _gameOver = (player) => {
     over = true;
     let result;
@@ -195,7 +193,7 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-  const playerSelectorsBlock = document.querySelector('.js-player-selectors');
+  const playerSelectors = document.querySelector('.js-player-selectors');
   const btnTicHuman = document.querySelector('.js-btn-tic-human');
   const btnTicAi = document.querySelector('.js-btn-tic-ai');
   const btnTacHuman = document.querySelector('.js-btn-tac-human');
@@ -245,7 +243,7 @@ const displayController = (() => {
   );
 
   btnControl.onclick = () => {
-    _toggleCssClasses(playerSelectorsBlock, 'hidden');
+    _toggleCssClasses(playerSelectors, 'hidden');
     _toggleCssClasses(btnControl, 'start', 'restart');
     if (game.hasStarted()) {
       game.restart();
