@@ -2,8 +2,7 @@ const X = 'x';
 const O = 'o';
 
 /*
-    TODO: Clean up the interface to allow players to put in their names and add
-    a display element that congratulates the winning player!
+    TODO: Clean up the interface to allow players to put in their names
  */
 
 /*
@@ -63,12 +62,14 @@ const game = (() => {
 
   const _gameOver = (player) => {
     over = true;
+    let result;
     if (!player) {
-      alert("It's a tie!");
+      result = "It's a tie!";
     } else {
-      const winner = player === playerOne ? 'player 1' : 'player 2';
-      alert(`${winner} wins`);
+      const winner = player === playerOne ? 'X' : 'O';
+      result = `${winner} wins!`;
     }
+    displayController.showResult(result);
   };
 
   // public methods
@@ -135,30 +136,33 @@ const gameBoard = (() => {
       const rowEnd = rowStart + 3;
       const row = board.slice(rowStart, rowEnd);
       const mark = row[0];
-      if (mark) return row.every((cell) => cell === mark);
+      if (mark && row.every((cell) => cell === mark)) return true;
     }
+    return false;
   };
 
   const _checkCols = () => {
     for (let i = 0; i <= 2; i++) {
-      const colMiddle = i + 3;
-      const colEnd = colMiddle + 3;
-      const col = [board[i], board[colMiddle], board[colEnd]];
+      const colStart = i;
+      const colMid = colStart + 3;
+      const colEnd = colMid + 3;
+      const col = [board[colStart], board[colMid], board[colEnd]];
       const mark = col[0];
-      if (mark) return col.every((cell) => cell === mark);
+      if (mark && col.every((cell) => cell === mark)) return true;
     }
+    return false;
   };
 
   const _checkLeftDiag = () => {
     const diag = [board[0], board[4], board[board.length - 1]];
     const mark = diag[0];
-    if (mark) return diag.every((cell) => cell === mark);
+    return mark && diag.every((cell) => cell === mark);
   };
 
   const _checkRightDiag = () => {
     const diag = [board[2], board[4], board[6]];
     const mark = diag[0];
-    if (mark) return diag.every((cell) => cell === mark);
+    return mark && diag.every((cell) => cell === mark);
   };
 
   // public methods
@@ -178,12 +182,15 @@ const gameBoard = (() => {
 
   const isCellFilled = (i) => !!board[i];
 
+  const getBoard = (i) => console.table(board);
+
   return {
     checkForWin,
     checkForTie,
     clearBoard,
     setCell,
     isCellFilled,
+    getBoard,
   };
 })();
 
@@ -194,9 +201,15 @@ const displayController = (() => {
   const btnTacHuman = document.querySelector('.js-btn-tac-human');
   const btnTacAi = document.querySelector('.js-btn-tac-ai');
   const cells = Array.from(document.querySelectorAll('.js-cell'));
+  const resultsDisplay = document.querySelector('.js-results-display');
   const btnControl = document.querySelector('.js-btn-control');
 
-  // player selection buttons' methods
+  // private methods
+
+  const _toggleCssClasses = (el, ...cls) =>
+    cls.map((cl) => el.classList.toggle(cl));
+
+  // Event handlers:
 
   btnTicHuman.onclick = () => {
     btnTicHuman.classList.add('pressed');
@@ -222,8 +235,6 @@ const displayController = (() => {
     game.setPlayer(O, true);
   };
 
-  // game field cells method
-
   cells.forEach((cell) =>
     cell.addEventListener('click', (e) => {
       const i = cells.indexOf(e.target);
@@ -233,12 +244,9 @@ const displayController = (() => {
     })
   );
 
-  // control button
-
   btnControl.onclick = () => {
-    playerSelectorsBlock.classList.toggle('hidden');
-    btnControl.classList.toggle('start');
-    btnControl.classList.toggle('restart');
+    _toggleCssClasses(playerSelectorsBlock, 'hidden');
+    _toggleCssClasses(btnControl, 'start', 'restart');
     if (game.hasStarted()) {
       game.restart();
     } else {
@@ -249,6 +257,7 @@ const displayController = (() => {
   // public methods
 
   const clearBoard = () => {
+    _toggleCssClasses(resultsDisplay, 'hidden');
     cells.forEach((cell) => {
       cell.classList.remove('tic', 'tac');
     });
@@ -258,8 +267,14 @@ const displayController = (() => {
     cells[i].classList.add(mark === X ? 'tic' : 'tac');
   };
 
+  const showResult = (result) => {
+    _toggleCssClasses(resultsDisplay, 'hidden');
+    resultsDisplay.textContent = result;
+  };
+
   return {
     clearBoard,
     markCell,
+    showResult,
   };
 })();
