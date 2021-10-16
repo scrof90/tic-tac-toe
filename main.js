@@ -26,6 +26,10 @@ const Player = (m, ai) => {
 
   // public methods
 
+  const getMark = () => mark;
+
+  const isAi = () => aiControlled;
+
   const play = () => {
     let choice;
     do {
@@ -34,14 +38,10 @@ const Player = (m, ai) => {
     game.playTurnAt(choice);
   };
 
-  const getMark = () => mark;
-
-  const isAi = () => aiControlled;
-
   return {
-    play,
     getMark,
     isAi,
+    play,
   };
 };
 
@@ -71,6 +71,10 @@ const game = (() => {
   };
 
   // public methods
+
+  const hasStarted = () => started;
+
+  const isOver = () => over;
 
   const setPlayer = (mark, ai) => {
     if (mark === X) {
@@ -104,21 +108,17 @@ const game = (() => {
     started = false;
     over = false;
     currentPlayer = playerOne;
-    gameBoard.clearBoard();
-    displayController.clearBoard();
+    gameBoard.resetBoard();
+    displayController.resetBoard();
   };
 
-  const hasStarted = () => started;
-
-  const isOver = () => over;
-
   return {
+    hasStarted,
+    isOver,
     setPlayer,
     start,
     playTurnAt,
     restart,
-    hasStarted,
-    isOver,
   };
 })();
 
@@ -165,30 +165,27 @@ const gameBoard = (() => {
 
   // public methods
 
-  const checkForWin = () =>
-    _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
-
-  const checkForTie = () => board.every((cell) => cell);
-
-  const clearBoard = () => {
-    board = [...emptyBoard];
-  };
+  const isCellFilled = (i) => !!board[i];
 
   const setCell = (mark, i) => {
     board[i] = mark;
   };
 
-  const isCellFilled = (i) => !!board[i];
+  const checkForWin = () =>
+    _checkRows() || _checkCols() || _checkLeftDiag() || _checkRightDiag();
 
-  const getBoard = (i) => console.table(board);
+  const checkForTie = () => board.every((cell) => cell);
+
+  const resetBoard = () => {
+    board = [...emptyBoard];
+  };
 
   return {
+    isCellFilled,
+    setCell,
     checkForWin,
     checkForTie,
-    clearBoard,
-    setCell,
-    isCellFilled,
-    getBoard,
+    resetBoard,
   };
 })();
 
@@ -199,7 +196,7 @@ const displayController = (() => {
   const btnTacHuman = document.querySelector('.js-btn-tac-human');
   const btnTacAi = document.querySelector('.js-btn-tac-ai');
   const cells = Array.from(document.querySelectorAll('.js-cell'));
-  const resultsDisplay = document.querySelector('.js-results-display');
+  const infoDisplay = document.querySelector('.js-info-display');
   const btnControl = document.querySelector('.js-btn-control');
 
   // private methods
@@ -254,25 +251,25 @@ const displayController = (() => {
 
   // public methods
 
-  const clearBoard = () => {
-    _toggleCssClasses(resultsDisplay, 'hidden');
-    cells.forEach((cell) => {
-      cell.classList.remove('tic', 'tac');
-    });
-  };
-
   const markCell = (mark, i) => {
     cells[i].classList.add(mark === X ? 'tic' : 'tac');
   };
 
   const showResult = (result) => {
-    _toggleCssClasses(resultsDisplay, 'hidden');
-    resultsDisplay.textContent = result;
+    infoDisplay.textContent = result;
+    infoDisplay.classList.remove('hidden');
+  };
+
+  const resetBoard = () => {
+    infoDisplay.classList.add('hidden');
+    cells.forEach((cell) => {
+      cell.classList.remove('tic', 'tac');
+    });
   };
 
   return {
-    clearBoard,
     markCell,
     showResult,
+    resetBoard,
   };
 })();
